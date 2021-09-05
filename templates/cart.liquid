@@ -66,17 +66,19 @@
       $.get('/cart.js')
       .then(response => JSON.parse(response))
       .then(cart => {
-        this.cart = cart;
-        this.format_prices();
+        this.set_cart(cart)
       })
     },
     methods : {
+      set_cart(cart) {
+        this.cart = cart;
+        this.format_prices();
+      },
       update_cart(id, qty) {
         $.post('/cart/update.js', `updates[${id}]=${qty}`)
         .then(response => JSON.parse(response))
         .then(cart => {
-          this.cart = cart;
-          this.format_prices();
+          this.set_cart(cart)
         })
       },
       format_prices() {
