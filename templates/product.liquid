@@ -62,6 +62,11 @@
       fallback_product_image: "{{ featured_image | img_url: '500x', scale:2 }}"
     }
   },
+  computed: {
+      current_variant() {
+        return this.variants.find(variant => variant.id == this.current_variant_id);
+      }
+  },
   methods: {
     variant_from_options() {
         const variant = this.variants.find((variant) => {
