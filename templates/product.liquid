@@ -39,7 +39,22 @@
   const ProductPage = {
   data() {
     return {
-      current_variant_id: "{{ product.selected_or_first_available_variant.id }}"
+      current_variant_id: "{{ product.selected_or_first_available_variant.id }}",
+      variants: [
+        {% for variant in product.variants %}
+          {
+            id: "{{ variant.id }}",
+            available: {{variant.available}},
+            option1: "{{ variant.option1 }}",
+            option2: "{{ variant.option2 }}",
+            option3: "{{ variant.option3 }}",
+            price: "{{ variant.price | money }}",
+            {% assign img_url = variant.image.src | img_url: '500x', scale:2 %}
+            image: "{% unless img_url contains 'no-image' %}{{ img_url }}{% endunless %}"
+          },
+        {% endfor %}
+      ],
+      fallback_product_image: "{{ featured_image | img_url: '500x', scale:2 }}"
     }
   }
 }
