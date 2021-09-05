@@ -35,22 +35,19 @@
     </div>
   </div>
 
-  {% if collections['shoes'].products.size > 0 %}
-    <div class="cart-upsells">
+    <div class="cart-upsells" v-if="upsells.length > 0">
       <h2>You might also like...</h2>
       
         <div class="cart-upsells-grid">
-          {% for product in collections['shoes'].products limit:4 %}
-            <div class="cart-upsell-item">
-              <div class="cart-upsell-title">{{ product.title }}</div>
-              <img class="cart-upsell-item-image" src="{{ product.featured_image | img_url: '400x', scale: 2 }}">
+          <template v-for="(upsell, index) in upsells">
+            <div class="cart-upsell-item" v-if="index < 4 ">
+              <div class="cart-upsell-title" v-html="upsell.title">{{ product.title }}</div>
+              <img class="cart-upsell-item-image" :src="upsell.image">
               <a class="cart-upsell-atc-btn">Add to cart</a>
             </div>
-          {% endfor %}
+          </template>
         </div>
-    </div>
-  {% endif %}
-  
+    </div>  
 </div>
 
 <script>
