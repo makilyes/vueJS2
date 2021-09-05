@@ -9,7 +9,7 @@
           <div class="cart-item-title" v-html="item.title"></div>
           <img :src="item.image">
           <div>
-            <div class="cart-item-price" v-html="item.line_price"></div>
+            <div class="cart-item-price" v-html="item.formated_line_price"></div>
             <label>
               Qty
               <input type="number" class="cart-item-qty" v-model="item.quantity" @change="update_cart(item.variant_id, item.quantity)">
@@ -27,7 +27,7 @@
     <div class="cart-sidebar">
       <div class="cart-sidebar-top">
         <h2>Your total</h2>
-        <div class="cart-total" v-html="cart.total_price"></div>
+        <div class="cart-total" v-html="cart.formated_total_price"></div>
       </div>
       <a href="/checkout" class="checkout-btn">
         Checkout
