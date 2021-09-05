@@ -67,14 +67,18 @@
         const variant = this.variants.find((variant) => {
           var match = true;
           if(variant.option1 != '') {
-            match = variant.option1 == this.variant_selection.option1
+            match = variant.option1 == this.variant_selection.option1;
+            console.log(match);
           }
           if(match && variant.option2 != '') {
-            match = variant.option2 == this.variant_selection.option2
+            match = variant.option2 == this.variant_selection.option2;
+            console.log(match);
           }
           if(match && variant.option3 != '') {
-            match = variant.option3 == this.variant_selection.option3
+            match = variant.option3 == this.variant_selection.option3;
+            console.log(match);
           }
+          console.log("Mon final match");
           console.log(match);
           return match;
         });
