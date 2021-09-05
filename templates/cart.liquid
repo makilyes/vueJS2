@@ -15,7 +15,7 @@
               <input type="number" class="cart-item-qty" v-model="item.quantity" @change="update_cart(item.variant_id, item.quantity)">
             </label>
           </div>
-          <div class="cart-item-remove"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
+          <div class="cart-item-remove" @click="remove_from_cart(item.variant_id)"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
         </div>
       </template>
       <template v-else>
@@ -86,6 +86,9 @@
           item.formated_line_price = Shopify.formatMoney(item.line_price);
         });
         this.cart.formated_total_price = Shopify.formatMoney(this.cart.total_price);
+      },
+      remove_from_cart(id) {
+        this.update_cart(id, 0);
       }
     }
   }
