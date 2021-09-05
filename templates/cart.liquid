@@ -69,7 +69,8 @@
               adding_upsell: false
             },
           {% endfor %}
-        ]
+        ],
+        loading: true
       }
     },
     created() {
@@ -92,6 +93,7 @@
       set_cart(cart) {
         this.cart = cart;
         this.format_prices();
+        this.loading = false;
       },
       update_cart(id, qty) {
         $.post('/cart/update.js', `updates[${id}]=${qty}`)
@@ -107,6 +109,7 @@
         this.cart.formated_total_price = Shopify.formatMoney(this.cart.total_price);
       },
       add_to_cart(id) {
+        this.loading = true;
         const upsell = this.upsells.find(upsell => upsell.variant_id == id);
         this.loading = true;
         upsell.adding_upsell = true;
@@ -125,6 +128,7 @@
         })
       },
       remove_from_cart(id) {
+        this.loading = true;
         this.update_cart(id, 0);
       }
     }
