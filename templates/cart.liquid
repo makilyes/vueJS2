@@ -12,7 +12,7 @@
             <div class="cart-item-price" v-html="item.line_price"></div>
             <label>
               Qty
-              <input type="number" class="cart-item-qty" :value="item.quantity">
+              <input type="number" class="cart-item-qty" v-model="item.quantity" @change="update_cart(item.variant_id, item.quantity)">
             </label>
           </div>
           <div class="cart-item-remove"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
@@ -68,6 +68,15 @@
       .then(cart => {
         this.cart = cart;
       })
+    },
+    methods : {
+      update_cart(id, qty) {
+        $.post('/cart/update.js', `updates[${id}]=${qty}`)
+        .then(response => JSON.parse(response))
+        .then(cart => {
+          this.cart = cart;
+        })
+      }
     }
   }
 
