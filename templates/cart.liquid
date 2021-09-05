@@ -59,7 +59,19 @@
       return {
         cart: {
           items: []
-        }
+        },
+        upsells: [
+          {% for product in collection['shoes'].products %}
+          {
+              title: "{{ product.title }}",
+              handle: "{{ product.handle }}",
+              image: "{{ product.featured_image | img_url: '400x', scale: 2 }}",
+              product_id: "{{ product.id }}",
+              variant_id: "{{ product.selected_or_first_available_variant.id }}",
+              adding_upsell: false
+            },
+          {% endfor %}
+        ]
       }
     },
     created() {
