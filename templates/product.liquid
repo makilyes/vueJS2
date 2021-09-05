@@ -92,6 +92,14 @@
         });
         this.current_variant_id = variant.id;
         this.update_history_state(variant);
+      },
+      update_history_state(variant) {
+        if(!history.replaceState || !variant) {
+          return;
+        }
+
+        var newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?variant=' + variant.id;
+        window.history.replaceState({path: newurl}, '', newurl);
       }
   }
 }
