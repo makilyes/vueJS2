@@ -4,24 +4,23 @@
     <div class="cart-table">
       
         
-          {% if cart.items.size > 0 %}
-            {% for item in cart.items %}
-              <div class="cart-row">
-                <div class="cart-item-title">{{ item.title }}</div>
-                <img src="{{ item.image | img_url: '400x', scale: 2 }} }}">
-                <div>
-                  <div class="cart-item-price">{{ item.final_line_price | money }}</div>
-                  <label>
-                    Qty
-                    <input type="number" class="cart-item-qty" value="{{ item.quantity }}">
-                  </label>
-                </div>
-                <div class="cart-item-remove"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
+          <template v-if="cart.items.length > 0">
+            <div class="cart-row" v-for="item in cart.items">
+              <div class="cart-item-title" v-html="item.title"></div>
+              <img :src="item.image">
+              <div>
+                <div class="cart-item-price">{{ item.final_line_price | money }}</div>
+                <label>
+                  Qty
+                  <input type="number" class="cart-item-qty" value="{{ item.quantity }}">
+                </label>
               </div>
-            {% endfor %}
-          {% else %}
+              <div class="cart-item-remove"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
+            </div>
+          </template>
+          <template v-else>
             Your cart is currently empty
-          {% endif %}
+          </template>
       
     </div>
 
