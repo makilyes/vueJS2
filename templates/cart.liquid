@@ -43,7 +43,7 @@
             <div class="cart-upsell-item" v-if="index < 4 ">
               <div class="cart-upsell-title" v-html="upsell.title">{{ product.title }}</div>
               <img class="cart-upsell-item-image" :src="upsell.image">
-              <a class="cart-upsell-atc-btn">Add to cart</a>
+              <a class="cart-upsell-atc-btn" @click="add_to_cart(upsell.variant_id)">Add to cart</a>
             </div>
           </template>
         </div>
@@ -72,13 +72,16 @@
       }
     },
     created() {
-      $.get('/cart.js')
-      .then(response => JSON.parse(response))
-      .then(cart => {
-        this.set_cart(cart)
-      })
+      this.get_cart();
     },
     methods : {
+      get_cart() {
+        $.get('/cart.js')
+        .then(response => JSON.parse(response)) 
+        .then(cart => {
+          this.set_cart(cart);
+        })
+      },
       set_cart(cart) {
         this.cart = cart;
         this.format_prices();
@@ -95,6 +98,24 @@
           item.formated_line_price = Shopify.formatMoney(item.line_price);
         });
         this.cart.formated_total_price = Shopify.formatMoney(this.cart.total_price);
+      },
+      add_to_cart(id) {
+        const upsell = this.upsells.find(upsell => upsell.variant_id == id);
+        this.loading = true;
+        upsell.adding_upsell = true;
+        $.post('/cart/add.js', {
+          items: [
+            {
+              id,
+              quantity: 1
+            }
+          ]
+        })
+        .then(response => JSON.parse(response))
+        .then(items => {
+          this.get_cart();
+          upsell.adding_upsell = false;
+        })
       },
       remove_from_cart(id) {
         this.update_cart(id, 0);
