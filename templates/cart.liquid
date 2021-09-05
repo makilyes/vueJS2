@@ -53,3 +53,24 @@
   {% endif %}
   
 </div>
+
+<script>
+  const CartPage = {
+    data() {
+      return {
+        cart: {
+          items: []
+        }
+      }
+    },
+    created() {
+      $.get('/cart.js')
+      .then(response => JSON.parse(response))
+      .then(cart => {
+        this.cart = cart;
+      })
+    }
+  }
+
+  Vue.createApp(CartPage).mount('#cart-page')
+</script>
