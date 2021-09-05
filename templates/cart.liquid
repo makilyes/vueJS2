@@ -4,30 +4,30 @@
     <div class="cart-table">
       
         
-          <template v-if="cart.items.length > 0">
-            <div class="cart-row" v-for="item in cart.items">
-              <div class="cart-item-title" v-html="item.title"></div>
-              <img :src="item.image">
-              <div>
-                <div class="cart-item-price">{{ item.final_line_price | money }}</div>
-                <label>
-                  Qty
-                  <input type="number" class="cart-item-qty" value="{{ item.quantity }}">
-                </label>
-              </div>
-              <div class="cart-item-remove"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
-            </div>
-          </template>
-          <template v-else>
-            Your cart is currently empty
-          </template>
+      <template v-if="cart.items.length > 0">
+        <div class="cart-row" v-for="item in cart.items">
+          <div class="cart-item-title" v-html="item.title"></div>
+          <img :src="item.image">
+          <div>
+            <div class="cart-item-price" v-html="item.line_price"></div>
+            <label>
+              Qty
+              <input type="number" class="cart-item-qty" :value="item.quantity">
+            </label>
+          </div>
+          <div class="cart-item-remove"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
+        </div>
+      </template>
+      <template v-else>
+        Your cart is currently empty
+      </template>
       
     </div>
 
     <div class="cart-sidebar">
       <div class="cart-sidebar-top">
         <h2>Your total</h2>
-        <div class="cart-total">{{ cart.total_price | money }}</div>
+        <div class="cart-total" v-html="cart.total_price"></div>
       </div>
       <a href="/checkout" class="checkout-btn">
         Checkout
