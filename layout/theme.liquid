@@ -17,8 +17,9 @@
   
 </head>
 <body>
+  {% include 'store.js' %}
 
-  <div class="header">
+  <div id ="header" class="header">
     <div class="header-inner container">
       <img src="{{ 'site-logo.png' | asset_url }}">
       <a class="header-link" href="/products/t-shirt">Shop the Tee</a>
@@ -26,6 +27,25 @@
       <a class="header-link cart" href="/cart">Cart</a>
     </div>
   </div>
+
+  <script>
+    const HeaderOptions = {
+      name: 'Header',
+      store,
+      created() {
+        store.dispatch('get_cart');
+      },
+      computed: {
+        cart() {
+          return store.state.cart;
+        }
+      }
+    }
+
+    const Header = Vue.createApp(HeaderOptions);
+    Header.mount('#header');
+    Header.use(store);
+  </script>
 
   <main role="main">
     {{ content_for_layout }}
