@@ -4,7 +4,7 @@
 <div id="product-page" class="product-page container">
   <div class="product-photo">
     <transition name="fade">
-      <img :src="current_variant.image || fallback_product_image">
+      <img :src="current_variant.image || fallback_product_image" :key="current_variant.image || fallback_product_image">
   </transition>
   </div>
   <div class="product-meta">
