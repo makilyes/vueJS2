@@ -39,7 +39,7 @@
       <h2>You might also like...</h2>
       
         <div class="cart-upsells-grid">
-          <template v-for="(upsell, index) in upsells">
+          <template v-for="(upsell, index) in filtered_upsells">
             <div class="cart-upsell-item" v-if="index < 4 ">
               <div class="cart-upsell-title" v-html="upsell.title">{{ product.title }}</div>
               <img class="cart-upsell-item-image" :src="upsell.image">
@@ -73,6 +73,12 @@
     },
     created() {
       this.get_cart();
+    },
+    computed: {
+      filtered_upsells() {
+        const products_in_cart = this.cart.items.map(item => item.product_id.toString());
+        return this.upsells.filter(upsell => !products_in_cart.includes(upsell.product_id));
+      }
     },
     methods : {
       get_cart() {
