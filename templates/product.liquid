@@ -26,7 +26,7 @@
       </div>
     {% endif %}
     <form action="/cart/add" method="post">
-      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <input type="hidden" name="id" :value="current_variant_id">
       <input type="hidden" name="quantity" value="1">
       <button type="submit" class="atc">
         Add to cart
@@ -39,7 +39,7 @@
   const ProductPage = {
   data() {
     return {
-      counter: 0
+      current_variant_id: "{{ product.selected_or_first_available_variant.id }}"
     }
   }
 }
