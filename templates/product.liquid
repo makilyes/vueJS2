@@ -5,7 +5,7 @@
   <div class="product-photo">
     <transition name="fade">
       <img :src="current_variant.image || fallback_product_image" :key="current_variant.image || fallback_product_image">
-  </transition>
+    </transition>
   </div>
   <div class="product-meta">
     <h1 class="product-title">{{ product.title }}</h1>
@@ -17,7 +17,7 @@
           <label for="{{ product_option.name }}">
             {{ product_option.name }}
           </label>
-          <select id="{{ product_option.name }}" v-model=" variant_selection.option{{ product_option.position }}" @change="variant_from_options">
+          <select id="{{ product_option.name }}" v-model="variant_selection.option{{ product_option.position }}" @change="variant_from_options">
             {% for value in product_option.values %}
               <option {% if product_option.selected_value == value %}selected{% endif %}>
                 {{ value }}
@@ -27,7 +27,7 @@
         {% endfor %}
       </div>
     {% endif %}
-    <form action="/cart/add" method="post">
+    <form action="/cart/add" method="post" @submit.prevent="handle_atc(current_variant_id)">
       <input type="hidden" name="id" :value="current_variant_id">
       <input type="hidden" name="quantity" value="1">
       <button type="submit" class="atc">
@@ -39,57 +39,50 @@
 
 <script>
   const ProductPage = {
-  data() {
-    return {
-      current_variant_id: "{{ product.selected_or_first_available_variant.id }}",
-      variant_selection: {
-        option1: "{{ product.options_with_values[0].selected_value }}",
-        option2: "{{ product.options_with_values[1].selected_value }}",
-        option3: "{{ product.options_with_values[2].selected_value }}"
-      },
-      variants: [
-        {% for variant in product.variants %}
-          {
-            id: "{{ variant.id }}",
-            available: {{variant.available}},
-            option1: "{{ variant.option1 }}",
-            option2: "{{ variant.option2 }}",
-            option3: "{{ variant.option3 }}",
-            price: "{{ variant.price | money }}",
-            {% assign img_url = variant.image.src | img_url: '500x', scale:2 %}
-            image: "{% unless img_url contains 'no-image' %}{{ img_url }}{% endunless %}"
-          },
-        {% endfor %}
-      ],
-      fallback_product_image: "{{ featured_image | img_url: '500x', scale:2 }}"
-    }
-  },
-  computed: {
+    name: 'Product',
+    data() {
+      return {
+        current_variant_id: "{{ product.selected_or_first_available_variant.id }}",
+        variant_selection: {
+          option1: "{{ product.options_with_values[0].selected_value }}",
+          option2: "{{ product.options_with_values[1].selected_value }}",
+          option3: "{{ product.options_with_values[2].selected_value }}",
+        },
+        variants: [
+          {% for variant in product.variants %}
+            {
+              id: "{{ variant.id }}",
+              available: {{ variant.available }},
+              option1: "{{ variant.option1 }}",
+              option2: "{{ variant.option2 }}",
+              option3: "{{ variant.option3 }}",
+              price: "{{ variant.price | money }}",
+              {% assign img_url = variant.image.src | img_url: '500x', scale: 2 %}
+              image: "{% unless img_url contains 'no-image' %}{{ img_url }}{% endunless %}"
+            },
+          {% endfor %}
+        ],
+        fallback_product_image: "{{ featured_image | img_url: '500x', scale: 2 }}"
+      }
+    },
+    computed: {
       current_variant() {
         return this.variants.find(variant => variant.id == this.current_variant_id);
       }
-  },
-  methods: {
-    variant_from_options() {
+    },
+    methods: {
+      variant_from_options() {
         const variant = this.variants.find((variant) => {
           var match = true;
           if(variant.option1 != '') {
-            match = variant.option1 == this.variant_selection.option1;
-            console.log("Mon match 1");
-            console.log(match);
+            match = variant.option1 == this.variant_selection.option1
           }
           if(match && variant.option2 != '') {
-            match = variant.option2 == this.variant_selection.option2;
-            console.log("Mon match 2");
-            console.log(match);
+            match = variant.option2 == this.variant_selection.option2
           }
           if(match && variant.option3 != '') {
-            match = variant.option3 == this.variant_selection.option3;
-            console.log("Mon match 3");
-            console.log(match);
+            match = variant.option3 == this.variant_selection.option3
           }
-          console.log("Mon final match");
-          console.log(match);
           return match;
         });
         this.current_variant_id = variant.id;
@@ -102,9 +95,12 @@
 
         var newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?variant=' + variant.id;
         window.history.replaceState({path: newurl}, '', newurl);
+      },
+      handle_atc(id) {
+        store.dispatch('add_to_cart', id);
       }
+    }
   }
-}
 
-Vue.createApp(ProductPage).mount('#product-page')
+  Vue.createApp(ProductPage).mount('#product-page');
 </script>
