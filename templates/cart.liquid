@@ -61,7 +61,7 @@
           items: []
         },
         upsells: [
-          {% for product in collection['shoes'].products %}
+          {% for product in collections['shoes'].products %}
           {
               title: "{{ product.title }}",
               handle: "{{ product.handle }}",
