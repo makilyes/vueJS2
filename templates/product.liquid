@@ -3,7 +3,9 @@
 
 <div id="product-page" class="product-page container">
   <div class="product-photo">
-    <img :src="current_variant.image || fallback_product_image">
+    <transition name="fade">
+      <img :src="current_variant.image || fallback_product_image">
+  </transition>
   </div>
   <div class="product-meta">
     <h1 class="product-title">{{ product.title }}</h1>
